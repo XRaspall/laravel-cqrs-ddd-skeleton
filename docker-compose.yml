@@ -1,0 +1,63 @@
+networks:
+    laravel-cqrs:
+
+services:
+    nginx-laravel-cqrs:
+        build:
+            context: ./.docker/ngnix
+            dockerfile: nginx.dockerfile
+        depends_on:
+            - php-laravel-cqrs
+        container_name: nginx-laravel-cqrs
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - ./:/var/www/html
+        networks:
+            - laravel-cqrs
+
+    php-laravel-cqrs:
+        build:
+            context: ./.docker/php
+            dockerfile: php.dockerfile
+        container_name: php-laravel-cqrs
+        volumes:
+            - ./:/var/www/html
+            - ./.docker/php/php.ini:/usr/local/etc/php/php.ini
+        environment:
+            PHP_INI_SCAN_DIR: /usr/local/etc/php
+        networks:
+            - laravel-cqrs
+
+    mysql-laravel-cqrs:
+        image: mysql:8.0.27
+        container_name: mysql-laravel-cqrs
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_DATABASE: laraveldb
+            MYSQL_USER: laravel
+            MYSQL_PASSWORD: secret
+            MYSQL_ROOT_PASSWORD: secret
+        networks:
+            - laravel-cqrs
+
+    phpmyadmin-laravel-cqrs:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin-laravel-cqrs
+        ports:
+            - 8080:80
+        environment:
+            PMA_HOST: mysql-laravel-cqrs
+            MYSQL_ROOT_PASSWORD: secret
+            UPLOAD_LIMIT: 500M
+            MAX_EXECUTION_TIME: 19200
+        depends_on:
+            - mysql-laravel-cqrs
+        networks:
+            - laravel-cqrs
+
+
+
+
