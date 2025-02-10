@@ -8,12 +8,7 @@ RUN mkdir -p /var/www/html
 
 ADD ./ /var/www/html
 
-# RUN chmod -R 777 /var/www/html/storage
-# RUN chmod -R 777 /var/www/html/bootstrap/cache
-
-# RUN docker-php-ext-install pdo pdo_mysql
 # Other PHP8 Extensions
-# Instale as dependências necessárias
 RUN apk add --no-cache autoconf g++ make openssl-dev \
     php-common \
     php-fpm \
@@ -65,3 +60,8 @@ RUN curl -sS https://getcomposer.org/installer -o composer-setup.php \
     && rm -rf composer-setup.php
 
 RUN chown -R laravel:laravel /var/www/html
+
+RUN echo 'cd /var/www/html/' >> /usr/bin/first \
+    && echo 'php artisan storage:link' >> /usr/bin/first \
+    && echo 'php artisan key:generate' >> /usr/bin/first \
+    && echo 'php artisan migrate:fresh --seed' >> /usr/bin/first \
