@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Src\App\User\Domain\Entities;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
+    use HasApiTokens;
+
     protected $table = 'users';
 
     /**

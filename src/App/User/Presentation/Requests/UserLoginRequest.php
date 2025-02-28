@@ -4,18 +4,10 @@ declare(strict_types=1);
 
 namespace Src\App\User\Presentation\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Src\Shared\Presentation\Requests\BaseRequest;
 
-class UserLoginRequest extends FormRequest
+class UserLoginRequest extends BaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -28,4 +20,5 @@ class UserLoginRequest extends FormRequest
             'password' => ['required', 'min:6', 'max:20'],
         ];
     }
+
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Src\App\User\Presentation\Controllers;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request;
 use Src\App\User\Presentation\Requests\UserLoginRequest;
 use Src\Shared\Domain\Contracts\CommandBusContract;
 use Src\Shared\Domain\Contracts\QueryBusContract;
@@ -16,8 +18,22 @@ class UserController extends Controller
         protected QueryBusContract $queryBus
     ) {}
 
-    public function login(UserLoginRequest $request): void
+    /**
+     * Validate user
+     *
+     * @param UserLoginRequest $request
+     */
+    public function login(UserLoginRequest $request)
     {
-        logger('User login request', $request->all());
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json([
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        return response()->json([
+            'token' => $request->user()->createToken($request->device)->plainTextToken,
+            'message' => 'Success'
+        ]);
     }
 }
