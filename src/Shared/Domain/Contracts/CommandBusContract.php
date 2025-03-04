@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Src\Shared\Domain\Contracts;
 
-
 use Src\Shared\Infrastructure\Bus\Command;
 
 interface CommandBusContract

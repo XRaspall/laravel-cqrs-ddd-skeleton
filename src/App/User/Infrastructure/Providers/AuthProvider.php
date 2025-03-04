@@ -8,12 +8,35 @@ use Src\App\User\Domain\Contracts\AuthProviderContract;
 
 class AuthProvider implements AuthProviderContract
 {
-    public function getToken(string $email, string $password)
+    /**
+     * Authenticate user
+     *
+     * @param string $email
+     * @param string $password
+     * @return bool
+     */
+    public function loginUser(string $email, string $password): bool
     {
         return auth()->attempt(['email' => $email, 'password' => $password]);
     }
 
-    public function getUser()
+    /**
+     * Get Token
+     *
+     * @param string $device
+     * @return bool
+     */
+    public function getToken(string $device): bool
+    {
+        return auth()->user()->createToken($device)->plainTextToken;
+    }
+
+    /**
+     * Get User
+     *
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null
+     */
+    public function getUser(): ?\Illuminate\Contracts\Auth\Authenticatable
     {
         return auth()->user();
     }
