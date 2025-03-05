@@ -7,6 +7,7 @@ namespace Src\Shared\Presentation\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\ValidationException;
 
 class BaseRequest extends FormRequest
 {
@@ -35,12 +36,12 @@ class BaseRequest extends FormRequest
     /**
      * Handle a failed validation attempt.
      *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
+     * @param  Validator  $validator
      * @return void
      *
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws HttpResponseException
      */
-    public function failedValidation(Validator $validator)
+    public function failedValidation(Validator $validator): void
     {
         throw new HttpResponseException(response()->json([
             'success'   => false,

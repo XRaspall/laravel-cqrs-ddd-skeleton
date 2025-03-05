@@ -7,9 +7,12 @@ namespace Src\App\User\Infrastructure\Providers;
 use Illuminate\Support\ServiceProvider;
 use Src\App\User\Application\Commands\LoginUser\LoginUserCommand;
 use Src\App\User\Application\Commands\LoginUser\LoginUserCommandHandler;
-use Src\App\User\Domain\Contracts\AuthProviderContract;
+use Src\App\User\Application\Commands\LogOut\LogOutUserCommand;
+use Src\App\User\Application\Commands\LogOut\LogOutUserCommandHandler;
+use Src\App\User\Domain\Contracts\AuthServiceContract;
 use Src\App\User\Domain\Contracts\UserRepositoryContract;
 use Src\App\User\Infrastructure\Repositories\UserRepository;
+use Src\App\User\Infrastructure\Services\AuthService;
 use Src\Shared\Domain\Contracts\CommandBusContract;
 use Src\Shared\Domain\Contracts\QueryBusContract;
 
@@ -29,7 +32,7 @@ class UserServiceProvider extends ServiceProvider
      */
     public $singletons = [
         UserRepositoryContract::class => UserRepository::class,
-        AuthProviderContract::class => AuthProvider::class,
+        AuthServiceContract::class => AuthService::class,
     ];
 
     /**
@@ -49,14 +52,21 @@ class UserServiceProvider extends ServiceProvider
         $this->registerQueryHandlers();
     }
 
+    /**
+     * Register command handlers.
+     */
     protected function registerCommandHandlers(): void
     {
         $commandBus = app(CommandBusContract::class);
         $commandBus->register([
             LoginUserCommand::class => LoginUserCommandHandler::class,
+            LogOutUserCommand::class => LogOutUserCommandHandler::class,
         ]);
     }
 
+    /**
+     * Register query handlers.
+     */
     protected function registerQueryHandlers(): void
     {
         $queryBus = app(QueryBusContract::class);

@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Src\App\User\Presentation\Controllers;
 
-use Illuminate\Contracts\Routing\ResponseFactory;
-use Illuminate\Foundation\Application;
+use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Request;
 use Src\App\User\Application\Commands\LoginUser\LoginUserCommand;
+use Src\App\User\Application\Commands\LogOut\LogOutUserCommand;
 use Src\App\User\Presentation\Requests\UserLoginRequest;
 use Src\Shared\Domain\Contracts\CommandBusContract;
 use Src\Shared\Domain\Contracts\QueryBusContract;
@@ -37,7 +34,7 @@ class UserController extends Controller
             );
 
             return $this->response($user);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return $this->response($e->getMessage(), 500);
         }
     }
@@ -45,11 +42,18 @@ class UserController extends Controller
     /**
      * Destroy token
      *
-     * @param Request $request
-     * @return ResponseFactory|Application|Response|object
+     * @return JsonResponse
      */
-    public function destroy(Request $request){
-        Auth::user()->currentAccessToken()->delete();
-        return response(null, 204);
+    public function destroy(): JsonResponse
+    {
+        try {
+            $this->commandBus->dispatch(
+                new LogOutUserCommand(),
+            );
+
+            return $this->response('User logged out');
+        } catch (Exception $e) {
+            return $this->response($e->getMessage(), 500);
+        }
     }
 }

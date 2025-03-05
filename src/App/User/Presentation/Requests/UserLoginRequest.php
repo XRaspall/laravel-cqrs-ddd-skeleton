@@ -11,7 +11,7 @@ class UserLoginRequest extends BaseRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array
      */
     public function rules(): array
     {
@@ -20,5 +20,4 @@ class UserLoginRequest extends BaseRequest
             'password' => ['required', 'min:6', 'max:20'],
         ];
     }
-
 }
