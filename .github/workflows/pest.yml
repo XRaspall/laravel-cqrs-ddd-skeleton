@@ -15,5 +15,31 @@ jobs:
     runs-on: "ubuntu-latest"
 
     steps:
-      - uses: actions/checkout@v1
-      - uses: nathanheffley/laravel-phpunit-action@master
+      - name: "Checkout code"
+        uses: "actions/checkout@v4"
+        with:
+          fetch-depth: ''
+
+      - name: "Setup PHP"
+        uses: "shivammathur/setup-php@v2"
+        with:
+          php-version: "${{ matrix.php }}"
+          extensions: "dom, curl, libxml, mbstring, zip, fileinfo"
+          tools: "composer:v2"
+          coverage: "none"
+
+      - name: "Check Composer configuration"
+        run: "composer validate"
+
+      - name: "Install highest dependencies from composer.json"
+        run: "composer update --with='laravel/framework:${{ matrix.laravel }}' --no-interaction --no-progress"
+
+      - name: "Check PSR-4 mapping"
+        run: "composer dump-autoload --optimize"
+
+      - name: "Run Pest on a sample Laravel application"
+        run: |
+          composer install --prefer-dist
+          cp .env.example .env
+          php artisan key:generate
+          vendor/bin/pest
