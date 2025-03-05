@@ -13,11 +13,23 @@ class IlluminateCommandBus implements CommandBusContract
         protected Dispatcher $bus,
     ) {}
 
+    /**
+     * Dispatch a command
+     *
+     * @param Command $command
+     * @return mixed
+     */
     public function dispatch(Command $command): mixed
     {
         return $this->bus->dispatch($command);
     }
 
+    /**
+     * Register command handlers
+     *
+     * @param array $map
+     * @return void
+     */
     public function register(array $map): void
     {
         $this->bus->map($map);

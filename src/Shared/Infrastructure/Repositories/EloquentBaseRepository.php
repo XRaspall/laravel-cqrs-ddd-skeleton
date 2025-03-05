@@ -22,16 +22,16 @@ class EloquentBaseRepository implements BaseRepositoryContract
     /**
      * Load relationships
      *
-     * @param array $relations
+     * @param array|string $relations
      * @return Builder
      */
-    private function with(array $relations = []): Builder
+    private function with(array|string $relations = []): Builder
     {
         if (is_string($relations)){
             $relations = explode(',', $relations);
         }
 
-        return $this->model->with($relations ?? []);
+        return $this->model->with($relations);
     }
 
     /**
