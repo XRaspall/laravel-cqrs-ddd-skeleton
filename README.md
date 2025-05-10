@@ -81,38 +81,40 @@ docker-compose down
 ## Project structure and explanation
 
 ```
+├── .docker/                          # Docker configuration files
+│   ├── caddy/                        # Caddy web server configuration
+│   └── php/                          # PHP-FPM configuration
+├── bootstrap/                        # Laravel Bootstraping
+├── config/                           # Laravel configuration files
+├── database/                         # Database migrations and seeders
+├── public/                           # Public entry point and assets
+├── resources/                        # Frontend resources
 ├── src/
-│   ├── App/                  # Application modules
-│   │   └── User/            # User module
-│   │       ├── Application/ # Application layer
-│   │       │   ├── Commands/    # Command handlers and DTOs
-│   │       │   └── Queries/     # Query handlers and DTOs
-│   │       ├── Domain/      # Domain layer
-│   │       │   ├── Models/      # Domain entities and value objects
-│   │       │   ├── Events/      # Domain events
-│   │       │   └── Repositories/# Repository interfaces
-│   │       ├── Infrastructure/  # Infrastructure layer
-│   │       │   ├── Persistence/ # Database implementations
-│   │       │   └── Services/    # External services
-│   │       └── Presentation/    # Presentation layer
-│   │           ├── Controllers/ # HTTP controllers
-│   │           ├── Requests/    # Form requests
-│   │           └── Resources/   # API resources
-│   └── Shared/              # Shared components and utilities
-│       ├── Infrastructure/  # Shared infrastructure components
-│       └── Domain/          # Shared domain components
-├── .docker/                  # Docker configuration files
-│   ├── caddy/               # Caddy web server configuration
-│   └── php/                 # PHP-FPM configuration
-├── config/                   # Laravel configuration files
-├── database/                 # Database migrations and seeders
-├── public/                   # Public entry point and assets
-├── resources/                # Frontend resources
-├── routes/                   # Application routes
-└── tests/                    # Test suites
-    ├── Unit/                # Unit tests
-    ├── Integration/         # Integration tests
-    └── Feature/             # Feature tests
+│   ├── App/                          # Application modules
+│   │   └── User/                     # User module
+│   │       ├── Application/          # Application layer
+│   │       │   ├── Commands/         # Command handlers and DTOs
+│   │       │   └── Queries/          # Query handlers and DTOs
+│   │       ├── Domain/               # Domain layer
+│   │       │   ├── Entities/         # Domain entities
+│   │       │   ├── Exception/        # Domain exceptions
+│   │       │   └── Contracts/        # Domain interfaces
+│   │       ├── Infrastructure/       # Infrastructure layer
+│   │       │   ├── Providers/        # Infrastructure providers
+│   │       │   ├── Repositories/     # Repositories implementations
+│   │       │   └── Services/         # External services
+│   │       └── Presentation/         # Presentation layer
+│   │           ├── Controllers/      # HTTP controllers
+│   │           ├── Requests/         # Form requests
+│   │           └── Routes/           # Module routes
+│   └── Shared/                       # Shared components and utilities
+│       ├── Infrastructure/           # Shared infrastructure components
+│       ├── Domain/                   # Shared domain components
+│       └── Presentation/             # Shared domain presentation components
+├── tests/                            # Test suites
+│   ├── Unit/                         # Unit tests
+│   ├── Integration/                  # Integration tests
+│   └── Feature/                      # Feature tests
 ```
 
 ### Architecture Overview
@@ -122,10 +124,10 @@ This project follows a clean architecture approach with DDD and CQRS patterns, o
 #### App Layer (`src/App/`)
 - Organized in modules (e.g., User)
 - Each module follows clean architecture with four layers:
-  - **Application**: Contains commands, and queries
+  - **Application**: Contains commands and queries
   - **Domain**: Contains business logic, entities, and interfaces
   - **Infrastructure**: Contains implementations of interfaces, repositories and external services
-  - **Presentation**: Contains controllers, requests, and API resources
+  - **Presentation**: Contains controllers, requests, and module routes
 
 #### Shared Layer (`src/Shared/`)
 - Contains reusable components across modules
@@ -174,4 +176,3 @@ This project follows a clean architecture approach with DDD and CQRS patterns, o
    - Keep related code close together
    - Use interfaces for dependencies
    - Follow SOLID principles
-   - Place shared components in the Shared layer
