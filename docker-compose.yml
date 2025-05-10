@@ -2,18 +2,19 @@ networks:
     laravel-cqrs:
 
 services:
-    nginx-laravel-cqrs:
-        build:
-            context: ./.docker/ngnix
-            dockerfile: nginx.dockerfile
-        depends_on:
-            - php-laravel-cqrs
-        container_name: nginx-laravel-cqrs
+    caddy-laravel-cqrs:
+        image: caddy:2-alpine
+        container_name: caddy-laravel-cqrs
         ports:
-            - 80:80
-            - 443:443
+            - "80:80"
+            - "443:443"
         volumes:
             - ./:/var/www/html
+            - ./.docker/caddy/Caddyfile:/etc/caddy/Caddyfile
+            - caddy_data:/data
+            - caddy_config:/config
+        depends_on:
+            - php-laravel-cqrs
         networks:
             - laravel-cqrs
 
@@ -57,6 +58,10 @@ services:
             - mysql-laravel-cqrs
         networks:
             - laravel-cqrs
+
+volumes:
+    caddy_data:
+    caddy_config:
 
 
 

@@ -1,0 +1,13 @@
+{
+    # Configuración global
+    admin off
+    auto_https off
+}
+
+:80 {
+    root * /var/www/html/public
+    php_fastcgi php-laravel-cqrs:9000
+    encode gzip
+    file_server
+    try_files {path} /index.php?{query}
+} 
