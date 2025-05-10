@@ -1,5 +1,4 @@
 {
-    # Configuración global
     admin off
     auto_https off
 }
